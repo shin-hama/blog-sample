@@ -1,5 +1,5 @@
 import path from "path"
-import { createFilePath } from "gatsby-source-filesystem"
+import { createFilePath, createRemoteFileNode } from "gatsby-source-filesystem"
 import type { GatsbyNode } from "gatsby"
 
 export const createPages: GatsbyNode["createPages"] = async ({
@@ -77,6 +77,36 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
       name: `slug`,
       node,
       value,
+    })
+  }
+}
+
+export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
+  actions,
+  createNodeId,
+  cache,
+  store,
+  reporter,
+}) => {
+  const { createNode, createNodeField } = actions
+  const url =
+    "https://1.bp.blogspot.com/-57tkLYxcww4/X5Ocg-z2NVI/AAAAAAABb_0/oSqGce_X39w7fbDZY5zSj_lE_b1cccxJgCNcBGAsYHQ/s793/science_pavlof_dog.png"
+
+  reporter.info("create irasutoya")
+  const fileNode = await createRemoteFileNode({
+    url: url, // string that points to the URL of the image
+    createNode, // helper function in gatsby-node to generate the node
+    createNodeId, // helper function in gatsby-node to generate the node id
+    cache,
+    store,
+    reporter,
+  })
+
+  if (fileNode) {
+    createNodeField({
+      node: fileNode,
+      name: "imageSource",
+      value: "irasutoya",
     })
   }
 }
